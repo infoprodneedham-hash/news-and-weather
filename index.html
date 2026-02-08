@@ -2,130 +2,134 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>TERMINAL-OS // GEELONG_CORE_V3</title>
+    <title>TERMINAL-OS // STEALTH_UNIT</title>
     <style>
         :root {
-            --neon-blue: #00f2ff;
-            --neon-green: #39ff14;
-            --bg-dark: #06070a;
-            --glass: rgba(0, 242, 255, 0.03);
-            --border: 1px solid rgba(0, 242, 255, 0.4);
-            --font: 'Courier New', Courier, monospace;
+            --phosphor-teal: #4ad8ff;
+            --warning-amber: #ffb347;
+            --system-green: #39ffba;
+            --bg-deep: #05080a; /* Darker Midnight Base */
+            --panel-bg: rgba(10, 15, 20, 0.8);
+            --border-dim: 1px solid rgba(74, 216, 255, 0.2);
+            --font-main: 'Courier New', Courier, monospace;
         }
 
         body {
-            background-color: var(--bg-dark);
-            color: var(--neon-blue);
-            font-family: var(--font);
+            background-color: var(--bg-deep);
+            color: var(--phosphor-teal);
+            font-family: var(--font-main);
             margin: 0;
             overflow: hidden;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
-                        linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
-            background-size: 100% 3px, 3px 100%;
+            /* Subtle CRT Texture */
+            background-image: linear-gradient(rgba(10, 10, 10, 0) 50%, rgba(0, 0, 0, 0.2) 50%);
+            background-size: 100% 4px;
         }
 
         .dashboard {
             display: grid;
-            grid-template-columns: 350px 1fr;
+            grid-template-columns: 320px 1fr;
             grid-template-rows: auto 1fr;
-            gap: 20px;
+            gap: 15px;
             padding: 20px;
-            height: calc(100vh - 120px);
+            height: calc(100vh - 110px);
         }
 
         .panel {
-            background: var(--glass);
-            border: var(--border);
+            background: var(--panel-bg);
+            border: var(--border-dim);
+            border-left: 3px solid var(--phosphor-teal);
             position: relative;
-            padding: 15px;
-            box-shadow: inset 0 0 15px rgba(0, 242, 255, 0.1);
+            padding: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
 
-        /* Clock Styling */
-        .clock-list {
-            list-style: none;
-            padding: 0;
-            margin: 10px 0 0 0;
+        /* Video Feed Specific styling */
+        .video-panel {
+            border-left: 1px solid rgba(74, 216, 255, 0.2);
+            border-top: 3px solid var(--warning-amber);
+            overflow: hidden;
         }
 
+        iframe { 
+            width: 100%; 
+            height: 100%; 
+            border: none; 
+            filter: grayscale(0.3) contrast(1.1) brightness(0.8);
+        }
+
+        /* Clock Module */
+        .clock-list { list-style: none; padding: 0; margin: 5px 0; }
         .clock-item {
             display: flex;
             justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px dotted rgba(0, 242, 255, 0.2);
-            font-size: 0.9rem;
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(74, 216, 255, 0.1);
+            font-size: 0.85rem;
+            color: rgba(74, 216, 255, 0.8);
         }
-
-        .clock-time {
-            font-weight: bold;
-            color: var(--neon-green);
-        }
-
-        .blink { animation: blinker 1.5s step-start infinite; }
-        @keyframes blinker { 50% { opacity: 0; } }
+        .clock-time { color: var(--warning-amber); font-weight: bold; }
 
         /* Tickers */
         .footer-news {
             position: fixed;
             bottom: 0;
             width: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            border-top: 2px solid var(--neon-blue);
+            background: #000;
+            border-top: 1px solid var(--phosphor-teal);
         }
-
         .ticker {
             display: flex;
             white-space: nowrap;
             overflow: hidden;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(0, 242, 255, 0.2);
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
-
         .ticker-content {
             display: inline-block;
-            animation: marquee 60s linear infinite;
+            animation: marquee 70s linear infinite;
             text-transform: uppercase;
-            font-size: 0.85rem;
-            letter-spacing: 2px;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            opacity: 0.8;
         }
+        #world-ticker { color: var(--system-green); animation-duration: 90s; }
 
         @keyframes marquee { 0% { transform: translateX(100vw); } 100% { transform: translateX(-100%); } }
 
         .label {
             position: absolute;
-            top: -10px; left: 10px;
-            background: var(--bg-dark);
-            padding: 0 5px;
-            font-size: 0.7rem;
-            border: 1px solid var(--neon-blue);
+            top: -9px; left: 10px;
+            background: var(--bg-deep);
+            padding: 0 8px;
+            font-size: 0.65rem;
+            color: var(--phosphor-teal);
+            letter-spacing: 2px;
+            border: 1px solid rgba(74, 216, 255, 0.3);
         }
-        
-        iframe { width: 100%; height: 100%; border: none; filter: brightness(0.9); }
     </style>
 </head>
 <body>
 
     <div class="dashboard">
         <div class="panel">
-            <div class="label">ATMOS_GEELONG</div>
-            <a class="weatherwidget-io" href="https://forecast7.com/en/n38d15144d36/geelong/" data-label_1="GEELONG" data-label_2="AUSTRALIA" data-theme="pure" data-basecolor="rgba(0,0,0,0)" data-textcolor="#00f2ff">GEELONG WEATHER</a>
+            <div class="label">ENV_DATA_GEELONG</div>
+            <a class="weatherwidget-io" href="https://forecast7.com/en/n38d15144d36/geelong/" data-label_1="GEELONG" data-label_2="LOCAL_STATION" data-theme="pure" data-basecolor="rgba(0,0,0,0)" data-textcolor="#4ad8ff" data-highcolor="#ffb347" data-lowcolor="#39ffba">WEATHER_LOADING...</a>
         </div>
 
-        <div class="panel" style="grid-row: span 2;">
-            <div class="label">LIVE_ABC_BROADCAST</div>
+        <div class="panel video-panel" style="grid-row: span 2;">
+            <div class="label" style="color: var(--warning-amber); border-color: var(--warning-amber);">SIGNAL_LIVE // ABC_NEWS</div>
             <iframe src="https://www.youtube.com/embed/live_stream?channel=UCVgO39Bk5sMo66-6o6Spn6Q&autoplay=1&mute=1"></iframe>
         </div>
 
         <div class="panel">
-            <div class="label">CHRONO_SYNC_GLOBAL</div>
-            <div class="clock-list" id="world-clocks">
-                </div>
+            <div class="label">TIME_SYNC_UTC</div>
+            <div class="clock-list" id="world-clocks"></div>
         </div>
     </div>
 
     <div class="footer-news">
-        <div class="ticker"><div id="local-ticker" class="ticker-content">ESTABLISHING LOCAL DATA UPLINK...</div></div>
-        <div class="ticker"><div id="world-ticker" class="ticker-content" style="color:var(--neon-green)">ESTABLISHING GLOBAL DATA UPLINK...</div></div>
+        <div class="ticker"><div id="local-ticker" class="ticker-content">LOCATING REGIONAL SATELLITE...</div></div>
+        <div class="ticker"><div id="world-ticker" class="ticker-content">SYNCHRONIZING GLOBAL HEADLINES...</div></div>
     </div>
 
     <script>
@@ -133,8 +137,8 @@
             { name: "MELBOURNE", zone: "Australia/Melbourne" },
             { name: "ADELAIDE", zone: "Australia/Adelaide" },
             { name: "PERTH", zone: "Australia/Perth" },
-            { name: "NEW ZEALAND", zone: "Pacific/Auckland" },
-            { name: "LONDON", zone: "Europe/London" },
+            { name: "NZ/AUCKLAND", zone: "Pacific/Auckland" },
+            { name: "LONDON/UK", zone: "Europe/London" },
             { name: "NEW YORK", zone: "America/New_York" },
             { name: "CALIFORNIA", zone: "America/Los_Angeles" }
         ];
@@ -143,47 +147,37 @@
             const container = document.getElementById('world-clocks');
             container.innerHTML = clocks.map(c => {
                 const timeStr = new Intl.DateTimeFormat('en-AU', {
-                    timeZone: c.zone,
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    hour12: false
+                    timeZone: c.zone, hour: '2-digit', minute: '2-digit', hour12: false
                 }).format(new Date());
-                
-                // Add a blinking colon
-                const formattedTime = timeStr.replace(':', '<span class="blink">:</span>');
-                
-                return `<div class="clock-item">
-                            <span>${c.name}</span>
-                            <span class="clock-time">${formattedTime}</span>
-                        </div>`;
+                return `<div class="clock-item"><span>${c.name}</span><span class="clock-time">${timeStr}</span></div>`;
             }).join('');
         }
 
-        // News Logic
-        async function fetchRSS(url, elementId, prefix) {
-            try {
-                const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`);
-                const data = await res.json();
-                if (data.status === 'ok') {
-                    const headlines = data.items.map(item => item.title.toUpperCase()).join(" /// ");
-                    document.getElementById(elementId).innerText = `${prefix}: /// ${headlines} ///`;
-                }
-            } catch (e) { document.getElementById(elementId).innerText = `${prefix}: OFFLINE`; }
-        }
-
-        function init() {
-            updateClocks();
-            setInterval(updateClocks, 10000); // Update clocks every 10 seconds
+        async function fetchNews() {
+            const rssPairs = [
+                { url: "https://www.sbs.com.au/news/topic/australia/feed", id: 'local-ticker', prefix: 'AUS_REGION' },
+                { url: "https://feeds.bbci.co.uk/news/world/rss.xml", id: 'world-ticker', prefix: 'GLOBAL_SITREP' }
+            ];
             
-            fetchRSS("https://www.sbs.com.au/news/topic/australia/feed", 'local-ticker', 'AUS_CORE');
-            fetchRSS("https://feeds.bbci.co.uk/news/world/rss.xml", 'world-ticker', 'WORLD_SITREP');
+            for (const pair of rssPairs) {
+                try {
+                    const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(pair.url)}`);
+                    const data = await res.json();
+                    if (data.status === 'ok') {
+                        const headlines = data.items.map(i => i.title.toUpperCase()).join(" [+] ");
+                        document.getElementById(pair.id).innerText = `${pair.prefix} // ${headlines} //`;
+                    }
+                } catch (e) { console.log("Feed Error"); }
+            }
         }
 
-        // Weather Script
-        !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
+        // Initialize
+        updateClocks();
+        setInterval(updateClocks, 30000);
+        fetchNews();
+        setInterval(fetchNews, 3600000);
 
-        init();
-        setInterval(() => init(), 3600000); // Refresh news hourly
+        !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
     </script>
 </body>
 </html>
