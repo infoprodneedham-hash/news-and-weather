@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TERMINAL-OS // GEELONG_UNIT</title>
+    <style>
+        :root {
+            --neon-blue: #00f2ff;
+            --neon-green: #39ff14;
+            --bg-dark: #06070a;
+            --glass-panel: rgba(0, 242, 255, 0.03);
+            --border-glow: 1px solid rgba(0, 242, 255, 0.4);
+            --font-main: 'Courier New', Courier, monospace;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--neon-blue);
+            font-family: var(--font-main);
+            margin: 0;
+            height: 100vh;
+            overflow: hidden;
+            background-image: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 2px, 3px 100%;
+        }
+
+        /* Layout Grid */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            grid-template-rows: 1fr;
+            gap: 25px;
+            padding: 30px;
+            height: calc(100vh - 120px);
+        }
+
+        .panel {
+            background: var(--glass-panel);
+            border: var(--border-glow);
+            border-radius: 2px;
+            padding: 20px;
+            box-shadow: inset 0 0 20px rgba(0, 242, 255, 0.05);
+            position: relative;
+        }
+
+        /* Weather Section (Fixed Width Sidebar Style) */
+        #weather-container {
+            border-left: 4px solid var(--neon-blue);
+        }
+
+        /* News Stream Section */
+        #stream-container {
+            position: relative;
+        }
+
+        /* CRT/Scanline Overlay for Video */
+        #stream-container::after {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            z-index: 2;
+            background-size: 100% 4px, 3px 100%;
+            pointer-events: none;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            opacity: 0.9;
+        }
+
+        /* Footer Tickers */
+        .footer-news {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: rgba(0, 5, 10, 0.95);
+            border-top: 2px solid var(--neon-blue);
+        }
+
+        .ticker {
+            display: flex;
+            white-space: nowrap;
+            overflow: hidden;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(0, 242, 255, 0.2);
+        }
+
+        .ticker-content {
+            display: inline-block;
+            animation: marquee 40s linear infinite;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        .world-news {
+            color: var(--neon-green);
+            animation-duration: 60s;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .label {
+            position: absolute;
+            top: -12px;
+            left: 15px;
+            background: var(--bg-dark);
+            padding: 0 10px;
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            border: 1px solid var(--neon-blue);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard">
+        <div class="panel" id="weather-container">
+            <div class="label">LOC_GEELONG_VIC</div>
+            <a class="weatherwidget-io" href="https://forecast7.com/en/n38d15144d36/geelong/" data-label_1="GEELONG" data-label_2="AUSTRALIA" data-theme="pure" data-basecolor="rgba(0,0,0,0)" data-accent="rgba(0, 242, 255, 0.2)" data-textcolor="#00f2ff" data-highcolor="#39ff14" >GEELONG WEATHER</a>
+            <script>
+            !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
+            </script>
+        </div>
+
+        <div class="panel" id="stream-container">
+            <div class="label">ABC_LIVE_SIGNAL</div>
+            <iframe 
+                src="https://www.youtube.com/embed/live_stream?channel=UCVgO39Bk5sMo66-6o6Spn6Q&autoplay=1&mute=1" 
+                allow="autoplay; encrypted-media" 
+                allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+
+    <div class="footer-news">
+        <div class="ticker">
+            <div class="ticker-content">
+                AUSTRALIA_CORE: /// GEELONG HUMIDITY AT 87% /// VICTORIA REGIONAL UPDATES LOADING... /// MELBOURNE TRAIN NETWORK STABLE /// RENEWABLE GRID AT 42% CAPACITY /// SYDNEY TECH HUB ONLINE ///
+            </div>
+        </div>
+        <div class="ticker">
+            <div class="ticker-content world-news">
+                WORLD_SITREP: /// GLOBAL QUANTUM SYNC SUCCESSFUL /// MARS COLONY TELEMETRY RECEIVED /// ARCTIC ICE SENSOR ARRAY ACTIVE /// TOKYO MARKET VOLATILITY INDEX: LOW ///
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
