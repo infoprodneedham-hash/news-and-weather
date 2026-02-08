@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>TERMINAL-OS // STEALTH_UNIT</title>
+    <title>TERMINAL-OS // STEALTH_UNIT_V3</title>
     <style>
         :root {
             --phosphor-teal: #4ad8ff;
             --warning-amber: #ffb347;
             --system-green: #39ffba;
-            --bg-deep: #05080a; /* Darker Midnight Base */
-            --panel-bg: rgba(10, 15, 20, 0.8);
+            --bg-deep: #05080a;
+            --panel-bg: rgba(10, 15, 20, 0.9);
             --border-dim: 1px solid rgba(74, 216, 255, 0.2);
             --font-main: 'Courier New', Courier, monospace;
         }
@@ -20,7 +20,6 @@
             font-family: var(--font-main);
             margin: 0;
             overflow: hidden;
-            /* Subtle CRT Texture */
             background-image: linear-gradient(rgba(10, 10, 10, 0) 50%, rgba(0, 0, 0, 0.2) 50%);
             background-size: 100% 4px;
         }
@@ -31,7 +30,8 @@
             grid-template-rows: auto 1fr;
             gap: 15px;
             padding: 20px;
-            height: calc(100vh - 110px);
+            /* Height adjusted for larger tickers */
+            height: calc(100vh - 160px); 
         }
 
         .panel {
@@ -43,9 +43,7 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
 
-        /* Video Feed Specific styling */
         .video-panel {
-            border-left: 1px solid rgba(74, 216, 255, 0.2);
             border-top: 3px solid var(--warning-amber);
             overflow: hidden;
         }
@@ -54,7 +52,7 @@
             width: 100%; 
             height: 100%; 
             border: none; 
-            filter: grayscale(0.3) contrast(1.1) brightness(0.8);
+            filter: grayscale(0.2) contrast(1.1) brightness(0.7);
         }
 
         /* Clock Module */
@@ -65,36 +63,44 @@
             padding: 5px 0;
             border-bottom: 1px solid rgba(74, 216, 255, 0.1);
             font-size: 0.85rem;
-            color: rgba(74, 216, 255, 0.8);
         }
         .clock-time { color: var(--warning-amber); font-weight: bold; }
 
-        /* Tickers */
+        /* GIANT TICKER STYLING */
         .footer-news {
             position: fixed;
             bottom: 0;
             width: 100%;
             background: #000;
-            border-top: 1px solid var(--phosphor-teal);
+            border-top: 2px solid var(--phosphor-teal);
+            z-index: 100;
         }
         .ticker {
             display: flex;
             white-space: nowrap;
             overflow: hidden;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 15px 0; /* More padding for bigger text */
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
         .ticker-content {
             display: inline-block;
-            animation: marquee 70s linear infinite;
+            animation: marquee 80s linear infinite; /* Slightly slower for readability */
             text-transform: uppercase;
-            font-size: 0.8rem;
-            letter-spacing: 1px;
-            opacity: 0.8;
+            font-size: 1.8rem; /* DOUBLED SIZE */
+            font-weight: 900;
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px rgba(74, 216, 255, 0.5);
         }
-        #world-ticker { color: var(--system-green); animation-duration: 90s; }
+        #world-ticker { 
+            color: var(--system-green); 
+            animation-duration: 100s;
+            text-shadow: 0 0 10px rgba(57, 255, 186, 0.5);
+        }
 
-        @keyframes marquee { 0% { transform: translateX(100vw); } 100% { transform: translateX(-100%); } }
+        @keyframes marquee { 
+            0% { transform: translateX(100vw); } 
+            100% { transform: translateX(-100%); } 
+        }
 
         .label {
             position: absolute;
@@ -102,9 +108,9 @@
             background: var(--bg-deep);
             padding: 0 8px;
             font-size: 0.65rem;
-            color: var(--phosphor-teal);
             letter-spacing: 2px;
             border: 1px solid rgba(74, 216, 255, 0.3);
+            z-index: 5;
         }
     </style>
 </head>
@@ -113,7 +119,7 @@
     <div class="dashboard">
         <div class="panel">
             <div class="label">ENV_DATA_GEELONG</div>
-            <a class="weatherwidget-io" href="https://forecast7.com/en/n38d15144d36/geelong/" data-label_1="GEELONG" data-label_2="LOCAL_STATION" data-theme="pure" data-basecolor="rgba(0,0,0,0)" data-textcolor="#4ad8ff" data-highcolor="#ffb347" data-lowcolor="#39ffba">WEATHER_LOADING...</a>
+            <a class="weatherwidget-io" href="https://forecast7.com/en/n38d15144d36/geelong/" data-label_1="GEELONG" data-label_2="LOCAL_STATION" data-theme="pure" data-basecolor="rgba(0,0,0,0)" data-textcolor="#4ad8ff" data-highcolor="#ffb347" data-lowcolor="#system-green">WEATHER_LOADING...</a>
         </div>
 
         <div class="panel video-panel" style="grid-row: span 2;">
@@ -128,8 +134,8 @@
     </div>
 
     <div class="footer-news">
-        <div class="ticker"><div id="local-ticker" class="ticker-content">LOCATING REGIONAL SATELLITE...</div></div>
-        <div class="ticker"><div id="world-ticker" class="ticker-content">SYNCHRONIZING GLOBAL HEADLINES...</div></div>
+        <div class="ticker"><div id="local-ticker" class="ticker-content">CONNECTING_LOCAL_SATELLITE...</div></div>
+        <div class="ticker"><div id="world-ticker" class="ticker-content">CONNECTING_GLOBAL_SATELLITE...</div></div>
     </div>
 
     <script>
@@ -155,8 +161,8 @@
 
         async function fetchNews() {
             const rssPairs = [
-                { url: "https://www.sbs.com.au/news/topic/australia/feed", id: 'local-ticker', prefix: 'AUS_REGION' },
-                { url: "https://feeds.bbci.co.uk/news/world/rss.xml", id: 'world-ticker', prefix: 'GLOBAL_SITREP' }
+                { url: "https://www.sbs.com.au/news/topic/australia/feed", id: 'local-ticker', prefix: 'AUS_CORE' },
+                { url: "https://feeds.bbci.co.uk/news/world/rss.xml", id: 'world-ticker', prefix: 'WORLD_REP' }
             ];
             
             for (const pair of rssPairs) {
@@ -167,11 +173,10 @@
                         const headlines = data.items.map(i => i.title.toUpperCase()).join(" [+] ");
                         document.getElementById(pair.id).innerText = `${pair.prefix} // ${headlines} //`;
                     }
-                } catch (e) { console.log("Feed Error"); }
+                } catch (e) { document.getElementById(pair.id).innerText = `${pair.prefix} // CONNECTION_LOSS`; }
             }
         }
 
-        // Initialize
         updateClocks();
         setInterval(updateClocks, 30000);
         fetchNews();
